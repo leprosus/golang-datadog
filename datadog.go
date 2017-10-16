@@ -45,6 +45,10 @@ func (d *DataDog) isOk() bool {
 		d.timestamp.Add(time.Duration(d.ttl) * time.Second).After(time.Now())
 }
 
+func (d *DataDog) TTL(ttl uint64) {
+	d.ttl = ttl
+}
+
 func (d *DataDog) SetStatus(status bool) {
 	d.status = status
 	d.timestamp = time.Now()
