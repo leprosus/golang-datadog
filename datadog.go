@@ -11,11 +11,11 @@ type DataDog struct {
 	sync.Once
 
 	timestamp time.Time
-	ttl       uint64
+	ttl       int64
 	status    bool
 }
 
-func NewDataDog(ttl uint64) *DataDog {
+func NewDataDog(ttl int64) *DataDog {
 	return &DataDog{
 		timestamp: time.Now(),
 		ttl:       ttl,
@@ -41,11 +41,11 @@ func (d *DataDog) Handle(host string, port uint64, router string) {
 }
 
 func (d *DataDog) isOk() bool {
-	return d.status &&
-		d.timestamp.Add(time.Duration(d.ttl) * time.Second).After(time.Now())
+	return d.status && (d.ttl < 0 ||
+		d.timestamp.Add(time.Duration(d.ttl) * time.Second).After(time.Now()))
 }
 
-func (d *DataDog) TTL(ttl uint64) {
+func (d *DataDog) TTL(ttl int64) {
 	d.ttl = ttl
 }
 
