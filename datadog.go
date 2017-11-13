@@ -41,7 +41,7 @@ func (d *DataDog) Handle(host string, port uint64, router string) {
 }
 
 func (d *DataDog) isOk() bool {
-	return d.status && (d.ttl < 0 ||
+	return d.status && (d.ttl <= 0 ||
 		d.timestamp.Add(time.Duration(d.ttl) * time.Second).After(time.Now()))
 }
 
